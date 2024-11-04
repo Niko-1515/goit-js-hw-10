@@ -7,25 +7,26 @@ const input = document.querySelector('.delay');
 let delay = null;
 
 input.addEventListener('input', event => {
-  delay = event.target.value;
+  delay = Number(event.target.value); // Конвертація у число
 });
 
 form.addEventListener('submit', event => {
   event.preventDefault();
 
-  let checked = document.querySelector('input[name="state"]:checked');
+  let checked = document.querySelector('input[name="state"]:checked'); // Переміщено всередину обробника події
 
   const promise = new Promise((resolve, reject) => {
     setTimeout(() => {
-      if (checked.value === 'fulfilled') {
+      if (checked && checked.value === 'fulfilled') {
         resolve(delay);
       } else {
         reject(delay);
       }
     }, delay);
   });
+
   promise.then(value => {
-    iziToast.error({
+    iziToast.success({
       message: `✅ Fulfilled promise in ${value}ms`,
       position: 'topCenter',
       color: 'green',
@@ -36,6 +37,7 @@ form.addEventListener('submit', event => {
       icon: false,
     });
   });
+
   promise.catch(err => {
     iziToast.error({
       message: `❌ Rejected promise in ${err}ms`,
@@ -48,5 +50,6 @@ form.addEventListener('submit', event => {
       icon: false,
     });
   });
+
   form.reset();
 });
